@@ -6,7 +6,7 @@ const { isAuthenticated } = require("./../middleware/jwt.middleware");
 
 // CRUD  --> Create Read Update Delete
 
-//Creat Job
+//Create Job
 router.post("/job", isAuthenticated, async (req, res, next) => {
   const { jobRole, companyName, jobUrl, salary, notes, interviewStage } =
     req.body;
@@ -33,6 +33,18 @@ router.get("/job", isAuthenticated, async (req, res, next) => {
       userId: req.payload._id,
     });
     res.status(201).json(searchResults);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get single job
+
+router.get("/job/:id", isAuthenticated, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const singleJob = await Job.findById(id);
+    res.status(200).json(singleJob);
   } catch (error) {
     next(error);
   }
